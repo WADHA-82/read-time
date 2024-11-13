@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>وقت القراءة</title>
+    <style>
+        /* ... نفس الأنماط السابقة ... */
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background-color: #F0F8FF;
+            color: #333;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+        }
+        header {
+            background: linear-gradient(45deg, #FF9A8B, #FF6B6B);
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            border-radius: 0 0 30px 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-size: 2.5em;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h2, h3 {
+            color: #FF6B6B;
+            text-align: center;
+        }
+        .story-of-week {
+            background: #E6E6FA;
+            border: 3px dashed #FF69B4;
+        }
+        .weekly-question {
+            background: #FFFACD;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        input, textarea, select {
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #FF69B4;
+            font-size: 1em;
+        }
+        button {
+            background-color: #FF69B4;
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.1em;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #FF1493;
+        }
+        .section-emoji {
+            font-size: 3em;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        #answerResult {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .audio-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #FF69B4;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        #weeklyQuestionInput {
+            width: 100%;
+            padding: 10px;
+            border-radius: 10px;
+            border: 2px solid #FFD700;
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>🎀 وقت القراءة 🎀</h1>
+    </header>
+
+    <div class="container">
+        <section>
+            <div class="section-emoji">📚</div>
+            <h2>مرحبًا بكم في وقت القراءة!</h2>
+            <p>نجتمع كل يوم خميس في المكتبة المدرسية لنناقش ماتم قراءته.</p>
+            <h3>أنشطتنا الممتعة:</h3>
+            <ul>
+                <li>قراءة القصص الشيقة</li>
+                <li>مناقشات جماعية مرحة</li>
+                <li>رسم الشخصيات المفضلة</li>
+                <li>مسابقات وجوائز مثيرة</li>
+            </ul>
+        </section>
+
+        <section class="story-of-week">
+            <div class="section-emoji">📖</div>
+            <h3>قصة الأسبوع</h3>
+            <p id="currentStory"></p>
+            <p>أدخلي عنوان قصة الأسبوع الجديدة واسم الكاتب/الكاتبة أدناه:</p>
+            
+            <form id="updateStoryForm">
+                <input type="text" id="newStoryTitle" placeholder="أدخلي عنوان القصة الجديدة هنا" required>
+                <input type="text" id="newStoryAuthor" placeholder="أدخلي اسم الكاتب/الكاتبة هنا" required>
+                <button type="submit">تحديث قصة الأسبوع</button>
+            </form>
+        </section>
+
+        <section>
+            <div class="section-emoji">✏️</div>
+            <h2>نموذج تقييم القصة</h2>
+            <form id="reviewForm">
+                <input type="text" id="student-name" name="student-name" placeholder="اسمك الجميل" required>
+                <input type="text" id="class" name="class" placeholder="صفك الدراسي" required>
+                <input type="text" id="book-title" name="book-title" placeholder="اسم القصة التي قرأتها" required>
+                <textarea id="summary" name="summary" rows="4" placeholder="ماذا أعجبك في القصة؟" required></textarea>
+                <select id="rating" name="rating" required>
+                    <option value="">كم نجمة تعطين للقصة؟</option>
+                    <option value="5">⭐⭐⭐⭐⭐ رائعة جداً!</option>
+                    <option value="4">⭐⭐⭐⭐ جميلة</option>
+                    <option value="3">⭐⭐⭐ جيدة</option>
+                    <option value="2">⭐⭐ مقبولة</option>
+                    <option value="1">⭐ لم تعجبني</option>
+                </select>
+                <button type="submit">أرسلي تقييمك 🌈</button>
+            </form>
+        </section>
+
+        <section class="weekly-question">
+            <div class="section-emoji">✨</div>
+            <h3>سؤال الأسبوع</h3>
+            <input type="text" id="weeklyQuestionInput" placeholder="أدخلي سؤال الأسبوع هنا">
+            <button id="updateQuestion">تحديث السؤال</button>
+            <p id="currentQuestion"></p>
+            <input type="text" id="answerInput" placeholder="اكتبي إجابتك هنا">
+            <button id="submitAnswer">أرسلي الإجابة</button>
+            <p id="answerResult"></p>
+        </section>
+    </div>
+
+    <button class="audio-control" id="musicToggle">🎵</button>
+
+    <audio id="backgroundMusic" loop>
+        <source src="/api/placeholder/audio" type="audio/mpeg">
+        متصفحك لا يدعم تشغيل الصوت.
+    </audio>
+
+    <audio id="submitSound">
+        <source src="/api/placeholder/audio" type="audio/mpeg">
+        متصفحك لا يدعم تشغيل الصوت.
+    </audio>
+
+    <script>
+        // ... نفس الكود JavaScript السابق ...
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const submitSound = document.getElementById('submitSound');
+        const musicToggle = document.getElementById('musicToggle');
+        const updateStoryForm = document.getElementById('updateStoryForm');
+        const currentStory = document.getElementById('currentStory');
+        const reviewForm = document.getElementById('reviewForm');
+        const submitAnswer = document.getElementById('submitAnswer');
+        const answerInput = document.getElementById('answerInput');
+        const answerResult = document.getElementById('answerResult');
+        const weeklyQuestionInput = document.getElementById('weeklyQuestionInput');
+        const updateQuestionButton = document.getElementById('updateQuestion');
+        const currentQuestion = document.getElementById('currentQuestion');
+
+        let isMusicPlaying = false;
+
+        musicToggle.addEventListener('click', () => {
+            if (isMusicPlaying) {
+                backgroundMusic.pause();
+                musicToggle.textContent = '🎵';
+            } else {
+                backgroundMusic.play();
+                musicToggle.textContent = '🔇';
+            }
+            isMusicPlaying = !isMusicPlaying;
+        });
+
+        updateStoryForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const newStoryTitle = document.getElementById('newStoryTitle').value;
+            const newStoryAuthor = document.getElementById('newStoryAuthor').value;
+            const newStoryFull = `"${newStoryTitle}" للكاتب/ة ${newStoryAuthor}`;
+            
+            currentStory.textContent = newStoryFull;
+            
+            alert('تم تحديث قصة الأسبوع بنجاح! 🎉');
+            
+            document.getElementById('newStoryTitle').value = '';
+            document.getElementById('newStoryAuthor').value = '';
+        });
+
+        reviewForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            submitSound.play();
+            alert('شكرًا لك! تم إرسال تقييمك بنجاح! 🎉');
+            reviewForm.reset();
+        });
+
+        updateQuestionButton.addEventListener('click', () => {
+            const newQuestion = weeklyQuestionInput.value.trim();
+            if (newQuestion) {
+                currentQuestion.textContent = newQuestion;
+                weeklyQuestionInput.value = '';
+                alert('تم تحديث سؤال الأسبوع بنجاح! 🎉');
+            } else {
+                alert('الرجاء إدخال سؤال قبل التحديث.');
+            }
+        });
+
+        submitAnswer.addEventListener('click', () => {
+            const userAnswer = answerInput.value.trim();
+            if (userAnswer) {
+                answerResult.textContent = "شكرًا على مشاركتك رأيك! 🌟";
+                answerResult.style.color = "green";
+                submitSound.play();
+                answerInput.value = '';
+            } else {
+                answerResult.textContent = "الرجاء كتابة إجابتك قبل الإرسال.";
+                answerResult.style.color = "red";
+            }
+        });
+    </script>
+</body>
+</html>
